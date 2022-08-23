@@ -1,5 +1,6 @@
 # monday-vue
 This is a test app for monday.Com
+
 Can be use as Board Views or Item Views
 ## Project setup
 ```
