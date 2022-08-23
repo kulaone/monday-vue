@@ -1,5 +1,6 @@
 # monday-vue
-
+This is a test app for monday.Com
+Can be use as Board Views or Item Views
 ## Project setup
 ```
 yarn install
@@ -14,6 +15,7 @@ yarn serve
 ```
 yarn build
 ```
+Then compress the dist folder and upload it as new build for your app.
 
 ### Lints and fixes files
 ```
