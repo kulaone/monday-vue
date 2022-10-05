@@ -23,5 +23,6 @@ pnpm-debug.log*
 *.sw?
 
 v*.zip
+dist.zip
 ngrok.js
 yarn.lock

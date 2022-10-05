@@ -4,8 +4,14 @@
         <div class="sectionDiv">
             Monday.get:
             <button v-for="(rType, index) in requestTypes" :key="index" @click="getRequest(rType.value)">{{
-                    rType.text
+            rType.text
             }}</button>
+        </div>
+        <div class="sectionDiv">
+            Monday.set:
+            Key <input type="text" v-model="settingKey" />
+            Value <input type="text" v-model="settingValue" />
+            <button @click="setRequest()">Setting</button>
         </div>
         <div class="sectionDiv">
             Monday.api: <input id="query" type="text" class="apiInput" v-model="queryText" />
@@ -32,6 +38,7 @@
             Value <input type="text" v-model="storageValue" />
             <button @click="storeGet">Get</button>
             <button @click="storeSet">Set</button>
+            <button @click="storeDelete">Delete</button>
         </div>
         <div>{{ resultsError }}</div>
         <json-viewer :value="resultsJson" :expand-depth=5 copyable boxed sort></json-viewer>
@@ -52,7 +59,7 @@ export default {
             resultsText: null,
             resultsError: null,
             resultsJson: null,
-            queryText: 'query { me { is_guest created_at name id } }',
+            queryText: 'query { complexity {query before after} me { is_guest created_at name id } }',
             noticeText: 'A message to dispaly for uesr',
             noticeSelected: 'success',
             noticeOptions: [
@@ -69,6 +76,8 @@ export default {
             ],
             storageKey: 'theKey',
             storageValue: '42',
+            settingKey: 'text',
+            settingValue: 'new text',
         };
     },
     methods: {
@@ -96,6 +105,17 @@ export default {
         getRequest(requestType) {
             this.monday.get(requestType).then(res => { this.updateResults(res) });
         },
+        async setRequest() {
+            try {
+                const settings = {}
+                settings[this.settingKey] = this.settingValue
+                const res = await this.monday.set("settings", settings);
+                this.updateResults(res)
+
+            } catch (e) {
+                this.resultsError = `Error. Make sure you app has permissions for API. ${e}`
+            }
+        },
         sendMessage() {
             this.monday.execute("notice", {
                 message: this.noticeText,
@@ -118,6 +138,11 @@ export default {
                 this.updateResults(res)
             });
         },
+        storeDelete() {
+            this.monday.storage.instance.deleteItem(this.storageKey).then(res => {
+                this.updateResults(res)
+            });
+        },
         storeSet() {
             this.monday.storage.instance.setItem(this.storageKey, this.storageValue).then(res => {
                 this.updateResults(res)
@@ -128,6 +153,7 @@ export default {
 </script>
 
 <style scoped>
+
 </style>
 
 <style>
